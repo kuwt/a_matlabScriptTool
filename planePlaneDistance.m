@@ -1,4 +1,4 @@
-function [averageDist, refplaneSD, planeSD] = planePlaneDistance(refplane,plane)
+function [averageDist, refplaneNormal, refplaneSD, planeNormal, planeSD] = planePlaneDistance(refplane,plane)
    
     %averageDist
     [n,~,p] = affine_fit(refplane);
@@ -20,7 +20,7 @@ function [averageDist, refplaneSD, planeSD] = planePlaneDistance(refplane,plane)
         dists(i) = point_plane_shortest_dist_vec(n(1),n(2),n(3),p(1),p(2),p(3),pt(1),pt(2),pt(3));
     end    
      refplaneSD = std(dists);
-     
+     refplaneNormal = n;
      
        %planeSD
       [n,~,p] = affine_fit(plane);
@@ -31,5 +31,6 @@ function [averageDist, refplaneSD, planeSD] = planePlaneDistance(refplane,plane)
         dists(i) = point_plane_shortest_dist_vec(n(1),n(2),n(3),p(1),p(2),p(3),pt(1),pt(2),pt(3));
     end    
      planeSD = std(dists);
+     planeNormal = n;
 end
 
