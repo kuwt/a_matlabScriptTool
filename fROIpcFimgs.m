@@ -22,8 +22,8 @@ fileID = fopen('D:\sourcecode\FaceScanning\reconstruction\face_scanner_src\Calib
 formatSpec = '%f\t%f\t%f\n';
 for x=Eff_ROI_TopLeftx:Eff_ROI_BotRightx
     for y=Eff_ROI_TopLefty:Eff_ROI_BotRighty
-        %ZMap(y,x)
-        fprintf(fileID, formatSpec, XMap(y,x), YMap(y,x), ZMap(y,x));
+      if (~isnan(ZMap(y,x)))
+         fprintf(fileID, formatSpec, XMap(y,x), YMap(y,x), ZMap(y,x));
     end
 end
 fclose(fileID);
@@ -38,8 +38,8 @@ formatSpec = '%f\t%f\t%f\n';
 ZMap(Eff_ROI_TopLefty,Eff_ROI_TopLeftx)
 for x=Eff_ROI_TopLeftx:Eff_ROI_BotRightx
     for y=Eff_ROI_TopLefty:Eff_ROI_BotRighty
-        %ZMap(y,x)
-        fprintf(fileID, formatSpec, XMap(y,x), YMap(y,x), ZMap(y,x));
+        if (~isnan(ZMap(y,x)))
+            fprintf(fileID, formatSpec, XMap(y,x), YMap(y,x), ZMap(y,x));
     end
 end
 fclose(fileID);
