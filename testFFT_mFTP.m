@@ -11,6 +11,7 @@ imshow(img1)
 imgsub1 = img - img1;
 figure('NumberTitle', 'off', 'Name', 'imgsub1');
 imshow(imgsub1)
+mkdir('log');
 imwrite(imgsub1,'log\\imgsub1.bmp' );
 
 Id1 = double(img1) - double(imgsub1);
