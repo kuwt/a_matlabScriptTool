@@ -31,7 +31,7 @@ imagesc(abs(F/mn))
 filter = ones(size(img));
 for h = 1 : size(img,1)
     for w = 1 :  size(img,2)
-        if w >= 638
+        if w <= 650
             filter(h,w) = 0;
         end
     end
