@@ -17,11 +17,16 @@ for c=1:cols
     temp2 = temp * (yMax - yMin) + yMin;
     I1(:,c,:)=uint8(floor(temp2));
 end
+
+%%% scale up to see the effect of harmonics, now the period becomes N * scaleFactor
 I = I1;
 I1 = imresize(I,scaleFactor,'nearest');
 imwrite(I1,'src.bmp');
 
-% fft
+%%%  fft
+%%% By fourier transform, tt 1/period, there will be a peak. 
+%%% Hence in the figure, there will be a peak in
+%%% 1/period * imageSize . 
 Fori = fft2(I1);
 F = fftshift(fft2((I1)));
 mn = size(I1,1) * size(I1,2);
@@ -36,3 +41,5 @@ subplot(3,1,1); plot(Fabs(1,1:end)); title('one row of fft magnitude');
 subplot(3,1,2); plot(Freal(1,1:end)); title('one row of fft real');
 subplot(3,1,3); plot(Fimag(1,1:end)); title('one row of fft imag');
 
+%%% If a peak is found in location other than the first peak, then
+%%% these are called higher order harmonics.
