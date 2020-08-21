@@ -13,7 +13,7 @@ imageSize = [2448,2048];
 projSize = [1024,1024];
 boardSize = [11,8];
 count = 14;
-
+approximateWorkingVolume = [-150,150,-200,200,0,600];
 %
 %
 % get camera corners
@@ -147,7 +147,7 @@ for i = 1:samplestep
     c = sol(3) * k3;
     d = sol(4) * k4 * phi + sol(5);
 
-    [y,z]=meshgrid(-50:150,100:600);
+    [y,z]=meshgrid(approximateWorkingVolume(3):approximateWorkingVolume(4),approximateWorkingVolume(5):approximateWorkingVolume(6));
     x = -(d + b * y + c * z) / a;
     surf(x,z,y,'FaceColor','blue','edgecolor','none')
     alpha 0.1
@@ -217,7 +217,7 @@ for i = 1:samplestep
     c = sol(3) * k3;
     d = sol(4) * k4 * phi + sol(5);
 
-    [x,z]=meshgrid(-150:150,100:600);
+    [x,z]=meshgrid(approximateWorkingVolume(1):approximateWorkingVolume(2),approximateWorkingVolume(5):approximateWorkingVolume(6));
     y = -(d + a * x + c * z) / b;
     surf(x,z,y,'FaceColor','blue','edgecolor','none')
     alpha 0.1
