@@ -4,6 +4,7 @@
 %
 VMap = imread('./in/finalpixelImageV.tif');
 HMap = imread('./in/finalpixelImageH.tif');
+colorMap = imread('./in/color.bmp');
 InValidMap = imread('./in/IsValid_image.bmp');
 K = params.IntrinsicMatrix;
 Kinv = inv(K.');
@@ -29,10 +30,9 @@ for h = 1:size(VMap,1)
 
         %genrrate projector plane
         phi =   HMap(h,w);
-        a = heq(1);
-        b = heq(2);
-        c = heq(3);
-        d = heq(4) * phi + heq(5);
+        %[a,b,c,d] = test_reconstructByPlanes_plane_model_const(sol_h,ks_h,phi);
+        [a,b,c,d] = test_reconstructByPlanes_plane_model_linear(  sol_h,ks_h,phi);
+      
         %put y = 0, z = 500
         x = (-d - c * 500)/a;
 
@@ -58,7 +58,7 @@ imwrite2tif(XMap,[],'log/XMap.tiff','single');
 imwrite2tif(YMap,[],'log/YMap.tiff','single');
 imwrite2tif(ZMap,[],'log/ZMap.tiff','single');
 
-pointcloud =  zeros(validPtcount,3);
+pointcloud =  zeros(validPtcount,4);
 cur_count = 1;
 for h = 1:size(VMap,1)
     for w = 1: size(VMap,2)
@@ -66,6 +66,7 @@ for h = 1:size(VMap,1)
             pointcloud(cur_count,1) = XMap(h,w);
             pointcloud(cur_count,2) = YMap(h,w);
             pointcloud(cur_count,3) = ZMap(h,w);
+            pointcloud(cur_count,4) = colorMap(h,w);
             cur_count = cur_count+ 1;
         end
     end
@@ -74,6 +75,7 @@ end
   
 fileID = fopen('log/pc.obj','w');
 for row = 1:size(pointcloud,1)
-    fprintf(fileID,'v %f %f %f\n',pointcloud(row,1),pointcloud(row,2),pointcloud(row,3));
+    fprintf(fileID,'v %f %f %f %f %f %f\n',pointcloud(row,1),pointcloud(row,2),pointcloud(row,3) ...
+    ,pointcloud(row,4),pointcloud(row,4),pointcloud(row,4));
 end
 fclose(fileID);

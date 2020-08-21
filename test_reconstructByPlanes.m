@@ -2,7 +2,6 @@
 % calibration
 %
 % %%%%%%%%%%%%%%%%%%%%%
-
 %
 %
 % Parameter
@@ -90,11 +89,12 @@ for i=1:numOfCounts
         z = xyzpxpy(j,3,i) * k3;
         px =  xyzpxpy(j,4,i) * k4;
         py = xyzpxpy(j,5,i) * k5;
-        %tmprow = [px*x,x,px*y,y,px*z,z, px,1];
-        tmprow = [x, y, z, px, 1];
+        tmprow = [px*x,x,px*y,y,px*z,z, px,1];
+        %tmprow = [x, y, z, px, 1];
         tmp =  [tmp;tmprow];
         
-        tmprow2 = [x, y, z, py, 1];
+        tmprow2 = [py*x,x,py*y,y,py*z,z, py,1];
+        %tmprow2 = [x, y, z, py, 1];
         tmp2 = [tmp2;tmprow2];
     end
 end
@@ -106,17 +106,15 @@ end
 %
 A = tmp;
 [U,D,V] = svd(A);
-sol= V(:,end);
-
+sol_v = V(:,end);
+ks_v = [k1,k2,k3,k4];
 % residue
 res_s = [];
 for i = 1:size(xyzpxpy,1)
     for j = 1:size(xyzpxpy,3)
         phi = xyzpxpy(i,4,j);
-        a = sol(1) * k1;
-        b = sol(2) * k2;
-        c = sol(3) * k3;
-        d = sol(4) * k4 * phi + sol(5);
+        %[a,b,c,d] = test_reconstructByPlanes_plane_model_const(sol_v,ks_v,phi);
+        [a,b,c,d] = test_reconstructByPlanes_plane_model_linear(sol_v,ks_v,phi);
         res = a * xyzpxpy(i,1,j) + b * xyzpxpy(i,2,j) + c * xyzpxpy(i,3,j) + d;
         rms = sqrt(a * a + b* b + c * c);
         res = abs(res)/ rms;
@@ -138,16 +136,9 @@ hold on
 testinterval = 100;
 samplestep = projSize(1) /testinterval;
 for i = 1:samplestep
-%   a = (sol(1) * k4 * phi + sol(2)) * k1;
-%   b = (sol(3) * k4 * phi + sol(4)) * k2;
-%   c = (sol(5) * k4 * phi + sol(6)) * k3;
-%   d = (sol(7) * k4 * phi + sol(8));
     phi = (i -1) * testinterval;
-    a = sol(1) * k1;
-    b = sol(2) * k2;
-    c = sol(3) * k3;
-    d = sol(4) * k4 * phi + sol(5);
-
+    %[a,b,c,d] = test_reconstructByPlanes_plane_model_const(sol_v,ks_v,phi);
+    [a,b,c,d] = test_reconstructByPlanes_plane_model_linear(sol_v,ks_v,phi);
     [y,z]=meshgrid(approximateWorkingVolume(3):approximateWorkingVolume(4),approximateWorkingVolume(5):approximateWorkingVolume(6));
     x = -(d + b * y + c * z) / a;
     surf(x,z,y,'FaceColor','blue','edgecolor','none')
@@ -164,9 +155,6 @@ for i = 1:numOfPoints
 end
 hold off
 
-%assign output
-veq = [a,b,c,sol(4)*k4,sol(5)];
-
 
 %
 %
@@ -176,17 +164,15 @@ veq = [a,b,c,sol(4)*k4,sol(5)];
 
 A = tmp2;
 [U,D,V] = svd(A);
-sol= V(:,end);
-
+sol_h= V(:,end);
+ks_h = [k1,k2,k3,k5];
 % residue
 res_s = [];
 for i = 1:size(xyzpxpy,1)
     for j = 1:size(xyzpxpy,3)
         phi = xyzpxpy(i,5,j);
-        a = sol(1) * k1;
-        b = sol(2) * k2;
-        c = sol(3) * k3;
-        d = sol(4) * k4 * phi + sol(5);
+        %[a,b,c,d] = test_reconstructByPlanes_plane_model_const(sol_h,ks_h,phi);
+        [a,b,c,d] = test_reconstructByPlanes_plane_model_linear(sol_h,ks_h,phi);
         res = a * xyzpxpy(i,1,j) + b * xyzpxpy(i,2,j) + c * xyzpxpy(i,3,j) + d;
         rms = sqrt(a * a + b* b + c * c);
         res = abs(res)/ rms;
@@ -208,16 +194,9 @@ hold on
 testinterval = 100;
 samplestep = projSize(2) /testinterval;
 for i = 1:samplestep
-%   a = (sol(1) * k4 * phi + sol(2)) * k1;
-%   b = (sol(3) * k4 * phi + sol(4)) * k2;
-%   c = (sol(5) * k4 * phi + sol(6)) * k3;
-%   d = (sol(7) * k4 * phi + sol(8));
     phi = (i -1) * testinterval;
-    a = sol(1) * k1;
-    b = sol(2) * k2;
-    c = sol(3) * k3;
-    d = sol(4) * k5 * phi + sol(5);
-
+    %[a,b,c,d] = test_reconstructByPlanes_plane_model_const(sol_h,ks_h,phi);
+    [a,b,c,d] = test_reconstructByPlanes_plane_model_linear(sol_h,ks_h,phi);
     [x,z]=meshgrid(approximateWorkingVolume(1):approximateWorkingVolume(2),approximateWorkingVolume(5):approximateWorkingVolume(6));
     y = -(d + a * x + c * z) / b;
     surf(x,z,y,'FaceColor','blue','edgecolor','none')
@@ -233,6 +212,3 @@ for i = 1:numOfPoints
     hold on
 end
 hold off
-
-%assign output
-heq = [a,b,c,sol(4)*k5,sol(5)];

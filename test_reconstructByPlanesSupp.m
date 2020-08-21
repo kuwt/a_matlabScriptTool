@@ -1,13 +1,10 @@
 % Run after test_reconstructByPlanesCont.m
-
 h = 465;
 w = 972;
 %genrrate projector plane
 phi =  HMap(h,w);
-a = heq(1);
-b = heq(2);
-c = heq(3);
-d = heq(4) * phi + heq(5);
+ %[a,b,c,d] = test_reconstructByPlanes_plane_model_const(sol_h,ks_h,phi);
+[a,b,c,d] = test_reconstructByPlanes_plane_model_linear(  sol_h,ks_h,phi);
 
 figure;
 showExtrinsics(params);
