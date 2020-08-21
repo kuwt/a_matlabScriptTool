@@ -49,20 +49,6 @@ figure;
 showExtrinsics(params);
 hold off
 
-% show reprojection images
-% for i = 0:count
-%     figure; 
-%     blankimage = ones(imageSize(1),imageSize(2),3);
-%     imshow(blankimage); 
-%     hold on;
-%     plot(imagePoints(:,1,i+1), imagePoints(:,2,i+1),'go');
-%     plot(params.ReprojectedPoints(:,1,i+1),params.ReprojectedPoints(:,2,i+1),'r+');
-%     legend('Detected Points','ReprojectedPoints');
-%     str_e = sprintf('log/reproject_%d.png',i);
-%     saveas(gcf,str_e)
-%     hold off;
-% end
-
 %
 % assign matrix [x y z px py]
 %
@@ -108,12 +94,12 @@ sol= V(:,end);
 
 % residue
 res_s = [];
-a = sol(1) * k1;
-b = sol(2) * k2;
-c = sol(3) * k3;
 for i = 1:size(xyzpxpy,1)
     for j = 1:size(xyzpxpy,3)
         phi = xyzpxpy(i,4,j);
+        a = sol(1) * k1;
+        b = sol(2) * k2;
+        c = sol(3) * k3;
         d = sol(4) * k4 * phi + sol(5);
         res = a * xyzpxpy(i,1,j) + b * xyzpxpy(i,2,j) + c * xyzpxpy(i,3,j) + d;
         rms = sqrt(a * a + b* b + c * c);
@@ -128,20 +114,19 @@ figure;
 histogram(res_s)
 txt = sprintf('mean_res. max_res. min_res = %f, %f, %f', mean_res, max_res, min_res)
 
-% test plane 
+% show test plane 
 figure;
 showExtrinsics(params);
 hold on
-a = sol(1) * k1;
-b = sol(2) * k2;
-c = sol(3) * k3;
-txt = sprintf('a. b. c = %f, %f, %f', a, b, c)
 for i = 1:11
 %   a = (sol(1) * k4 * phi + sol(2)) * k1;
 %   b = (sol(3) * k4 * phi + sol(4)) * k2;
 %   c = (sol(5) * k4 * phi + sol(6)) * k3;
 %   d = (sol(7) * k4 * phi + sol(8));
     phi = (i -1) * 100;
+    a = sol(1) * k1;
+    b = sol(2) * k2;
+    c = sol(3) * k3;
     d = sol(4) * k4 * phi + sol(5);
 
     [y,z]=meshgrid(-50:150,100:600);
@@ -180,12 +165,12 @@ sol= V(:,end);
 
 % residue
 res_s = [];
-a = sol(1) * k1;
-b = sol(2) * k2;
-c = sol(3) * k3;
 for i = 1:size(xyzpxpy,1)
     for j = 1:size(xyzpxpy,3)
         phi = xyzpxpy(i,5,j);
+        a = sol(1) * k1;
+        b = sol(2) * k2;
+        c = sol(3) * k3;
         d = sol(4) * k4 * phi + sol(5);
         res = a * xyzpxpy(i,1,j) + b * xyzpxpy(i,2,j) + c * xyzpxpy(i,3,j) + d;
         rms = sqrt(a * a + b* b + c * c);
@@ -204,16 +189,15 @@ txt = sprintf('mean_res. max_res. min_res = %f, %f, %f', mean_res, max_res, min_
 figure;
 showExtrinsics(params);
 hold on
-a = sol(1) * k1;
-b = sol(2) * k2;
-c = sol(3) * k3;
-txt = sprintf('a. b. c = %f, %f, %f', a, b, c)
 for i = 1:11
 %   a = (sol(1) * k4 * phi + sol(2)) * k1;
 %   b = (sol(3) * k4 * phi + sol(4)) * k2;
 %   c = (sol(5) * k4 * phi + sol(6)) * k3;
 %   d = (sol(7) * k4 * phi + sol(8));
     phi = (i -1) * 100;
+    a = sol(1) * k1;
+    b = sol(2) * k2;
+    c = sol(3) * k3;
     d = sol(4) * k4 * phi + sol(5);
 
     [x,z]=meshgrid(-150:150,100:600);
