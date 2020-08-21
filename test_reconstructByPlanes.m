@@ -75,10 +75,11 @@ xyzpxpy = tmp;
 % Calibrate Projector, assign matrix to solve
 %
 %
-k1 = 1/100;
-k2 = 1/100;
-k3 = 1/500;
-k4 = 1/1024;
+k1 = 1/abs(approximateWorkingVolume(2));
+k2 = 1/abs(approximateWorkingVolume(4));
+k3 = 1/abs(approximateWorkingVolume(6));
+k4 = 1/abs(projSize(1));
+k5 = 1/abs(projSize(2));
 numOfPoints = size(worldPoints,1);
 tmp = [];
 tmp2 = [];
@@ -88,7 +89,7 @@ for i=1:numOfCounts
         y = xyzpxpy(j,2,i) * k2;
         z = xyzpxpy(j,3,i) * k3;
         px =  xyzpxpy(j,4,i) * k4;
-        py = xyzpxpy(j,5,i) * k4;
+        py = xyzpxpy(j,5,i) * k5;
         %tmprow = [px*x,x,px*y,y,px*z,z, px,1];
         tmprow = [x, y, z, px, 1];
         tmp =  [tmp;tmprow];
@@ -215,7 +216,7 @@ for i = 1:samplestep
     a = sol(1) * k1;
     b = sol(2) * k2;
     c = sol(3) * k3;
-    d = sol(4) * k4 * phi + sol(5);
+    d = sol(4) * k5 * phi + sol(5);
 
     [x,z]=meshgrid(approximateWorkingVolume(1):approximateWorkingVolume(2),approximateWorkingVolume(5):approximateWorkingVolume(6));
     y = -(d + a * x + c * z) / b;
@@ -234,4 +235,4 @@ end
 hold off
 
 %assign output
-heq = [a,b,c,sol(4)*k4,sol(5)];
+heq = [a,b,c,sol(4)*k5,sol(5)];
