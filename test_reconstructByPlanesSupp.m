@@ -1,3 +1,5 @@
+% Run after test_reconstructByPlanesCont.m
+
 h = 465;
 w = 972;
 %genrrate projector plane
