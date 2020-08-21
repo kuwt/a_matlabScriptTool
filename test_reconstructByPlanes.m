@@ -10,7 +10,7 @@
 %
 squareSizeInMM = 25;
 imageSize = [2448,2048];
-%imageSize = [1024,1024];
+projSize = [1024,1024];
 boardSize = [11,8];
 count = 14;
 
@@ -133,12 +133,15 @@ txt = sprintf('mean_res. max_res. min_res = %f, %f, %f', mean_res, max_res, min_
 figure;
 showExtrinsics(params);
 hold on
-for i = 1:11
+
+testinterval = 100;
+samplestep = projSize(1) /testinterval;
+for i = 1:samplestep
 %   a = (sol(1) * k4 * phi + sol(2)) * k1;
 %   b = (sol(3) * k4 * phi + sol(4)) * k2;
 %   c = (sol(5) * k4 * phi + sol(6)) * k3;
 %   d = (sol(7) * k4 * phi + sol(8));
-    phi = (i -1) * 100;
+    phi = (i -1) * testinterval;
     a = sol(1) * k1;
     b = sol(2) * k2;
     c = sol(3) * k3;
@@ -200,12 +203,15 @@ txt = sprintf('mean_res. max_res. min_res = %f, %f, %f', mean_res, max_res, min_
 figure;
 showExtrinsics(params);
 hold on
-for i = 1:11
+
+testinterval = 100;
+samplestep = projSize(2) /testinterval;
+for i = 1:samplestep
 %   a = (sol(1) * k4 * phi + sol(2)) * k1;
 %   b = (sol(3) * k4 * phi + sol(4)) * k2;
 %   c = (sol(5) * k4 * phi + sol(6)) * k3;
 %   d = (sol(7) * k4 * phi + sol(8));
-    phi = (i -1) * 100;
+    phi = (i -1) * testinterval;
     a = sol(1) * k1;
     b = sol(2) * k2;
     c = sol(3) * k3;
