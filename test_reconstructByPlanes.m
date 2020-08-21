@@ -1,8 +1,13 @@
-%
+% %%%%%%%%%%%%%%%%%%%%%
 % calibration
 %
-%
+% %%%%%%%%%%%%%%%%%%%%%
 
+%
+%
+% Parameter
+%
+%
 squareSizeInMM = 25;
 imageSize = [2448,2048];
 %imageSize = [1024,1024];
@@ -10,7 +15,9 @@ boardSize = [11,8];
 count = 14;
 
 %
+%
 % get camera corners
+%
 %
 B = [];
 for i = 0:count
@@ -36,9 +43,10 @@ for i = 0:count
     B = cat(3,B,A);
 end 
 proj_imagePoints = B;
-
+%
 %
 % calibrate camera
+%
 %
 worldPoints = generateCheckerboardPoints(boardSize,squareSizeInMM);
 params = estimateCameraParameters(cam_imagePoints,worldPoints);
@@ -50,7 +58,7 @@ showExtrinsics(params);
 hold off
 
 %
-% assign matrix [x y z px py]
+% Calibrate Projector, assign matrix [x y z px py]
 %
 worldPointswZ = [worldPoints,zeros(size(worldPoints,1),1)];
 numOfCounts = count + 1;
@@ -63,7 +71,9 @@ end
 xyzpxpy = tmp;
 
 %
-% assign matrix to solve
+%
+% Calibrate Projector, assign matrix to solve
+%
 %
 k1 = 1/100;
 k2 = 1/100;
@@ -88,6 +98,11 @@ for i=1:numOfCounts
     end
 end
 
+%
+%
+% calibrate vertical projection planes
+%
+%
 A = tmp;
 [U,D,V] = svd(A);
 sol= V(:,end);
@@ -148,17 +163,13 @@ hold off
 %assign output
 veq = [a,b,c,sol(4)*k4,sol(5)];
 
-% 
+
 %
 %
+% calibrate horizontal projection planes
 %
 %
-%horizontal
-%
-%
-%
-%
-%
+
 A = tmp2;
 [U,D,V] = svd(A);
 sol= V(:,end);
