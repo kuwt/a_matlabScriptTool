@@ -73,6 +73,12 @@ xyzpxpy = tmp;
 %
 % Calibrate Projector, assign matrix to solve
 %
+% assume projector plane mode
+% 1) const model: ax + by + cz + m1 * phi + m2 = 0
+% 2) linear model: (a1* phi + a2)x + (b1*phi + b2)y + (c1*phi + c2)z +
+% m1*phi + m2 = 0
+%
+% We already have x,y,z, phi from the previous steps
 %
 k1 = 1/abs(approximateWorkingVolume(2));
 k2 = 1/abs(approximateWorkingVolume(4));
@@ -89,12 +95,12 @@ for i=1:numOfCounts
         z = xyzpxpy(j,3,i) * k3;
         px =  xyzpxpy(j,4,i) * k4;
         py = xyzpxpy(j,5,i) * k5;
-        tmprow = [px*x,x,px*y,y,px*z,z, px,1];
-        %tmprow = [x, y, z, px, 1];
+        tmprow = [px*x,x,px*y,y,px*z,z, px,1]; %linear model
+        %tmprow = [x, y, z, px, 1]; %const model
         tmp =  [tmp;tmprow];
         
-        tmprow2 = [py*x,x,py*y,y,py*z,z, py,1];
-        %tmprow2 = [x, y, z, py, 1];
+        tmprow2 = [py*x,x,py*y,y,py*z,z, py,1]; %linear model
+        %tmprow2 = [x, y, z, py, 1]; %const model
         tmp2 = [tmp2;tmprow2];
     end
 end
